@@ -28,7 +28,7 @@ const Episode = ({name, season,number, image, summary}:IEpisode) => {
              <span> S{season<10?`0${season}`:season}</span> 
              <span>E{number<10?`0${number}`:number}</span>
             </p>
-            <img src={image.medium} alt="episode photo"/>
+            <img src={image.medium} alt="episode item"/>
             <p>{cleanedSummary}</p>
         </div>
     )
