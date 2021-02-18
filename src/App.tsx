@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 import episodes from './episodes.json';
 import Episode from './Components/episode'
