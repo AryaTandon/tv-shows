@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import episodes from './episodes.json';
 import Episode from './Components/episode'
@@ -23,20 +23,39 @@ interface IEpisode {
 }
 function App() {
 
-  const mapEpisodeDetails = ({name, season, number, image, summary}:IEpisode) => {
+  const [input, setInput] = useState("")
+
+  const mapEpisodeDetails = ( {name, season, number, image, summary}: IEpisode) => {
     return <Episode 
-            name={name}
-            season={season}
-            number={number}
-            image= {image}
+            name = {name}
+            season = {season}
+            number = {number}
+            image = {image}
             summary = {summary}
             />
   }
 
-  let mappedEpisodes = episodes.map(mapEpisodeDetails)
+  const episodesShowing = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  }
+
+  const episodePick = ( {name}: {name: string} ) => {
+    return (
+      input.length > 0 ? (`${name.toLowerCase()}`).startsWith(`${input.toLowerCase()}`)
+    : true
+    )
+  }
+
+  let filteredEpisodes = episodes.filter(episodePick);
+  let mappedEpisodes = filteredEpisodes.map(mapEpisodeDetails);
 
   return (
     <div>
+      <input 
+      type="text"
+      onChange={episodesShowing}
+      />
+      <p>The number of episodes which match your search: {filteredEpisodes.length}/{episodes.length}.</p>
      {mappedEpisodes}
     </div>
   );

@@ -17,10 +17,9 @@ interface IEpisode {
     // _links: { self: { href: string } };
   }
 
-const Episode = ({name, season,number, image, summary}:IEpisode) => {
+const Episode = ( {name, season, number, image, summary}: IEpisode) => {
     
     const cleanedSummary = summary.replace(/<p>|<\/p>|<br>/g, "") //figure out how to remove all <>
-
 
     return (
         <div>
