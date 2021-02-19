@@ -25,14 +25,21 @@ function App() {
 
   const [input, setInput] = useState("")
 
-  const mapEpisodeDetails = ( {name, season, number, image, summary}: IEpisode) => {
+  const mapEpisodeDetails = ( {id, name, season, number, image, summary}: IEpisode) => {
     return <Episode 
+            id = {id}   
             name = {name}
             season = {season}
             number = {number}
             image = {image}
             summary = {summary}
             />
+  }
+
+  const episodesDropdown = ( {id, name, season, number}: IEpisode) => {
+    return (
+      <option value={`${id}`}> S{season<10?`0${season}`:season}E{number<10?`0${number}`:number} - {name}</option>
+    )
   }
 
   const episodesShowing = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,11 +53,20 @@ function App() {
     )
   }
 
+  const scrollToEpisode = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const element = document.getElementById(`${event.target.value}`);
+    element?.scrollIntoView({behavior: "smooth"});
+  }
+
   let filteredEpisodes = episodes.filter(episodePick);
   let mappedEpisodes = filteredEpisodes.map(mapEpisodeDetails);
+  let episodeOption = episodes.map(episodesDropdown);
 
   return (
     <div>
+      <select onChange={scrollToEpisode}>
+        {episodeOption}
+      </select>
       <input 
       type="text"
       onChange={episodesShowing}

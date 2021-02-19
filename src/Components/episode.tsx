@@ -1,5 +1,5 @@
 interface IEpisode {
-    // id: number;
+    id: number;
     // url: string;
     name: string;
     season: number;
@@ -17,13 +17,13 @@ interface IEpisode {
     // _links: { self: { href: string } };
   }
 
-const Episode = ( {name, season, number, image, summary}: IEpisode) => {
+const Episode = ( {id, name, season, number, image, summary}: IEpisode) => {
     
     // const cleanedSummary = summary.replace(/<p>|<\/p>|<br>/g, "") //figure out how to remove all <>
     const cleanedSummary = summary.replace(/<(.*?)>/g, "");
 
     return (
-        <div>
+        <div id={`${id}`}>
             <p>{name}
              <span> S{season<10?`0${season}`:season}</span> 
              <span>E{number<10?`0${number}`:number}</span>
