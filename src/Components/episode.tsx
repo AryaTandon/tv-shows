@@ -19,7 +19,8 @@ interface IEpisode {
 
 const Episode = ( {name, season, number, image, summary}: IEpisode) => {
     
-    const cleanedSummary = summary.replace(/<p>|<\/p>|<br>/g, "") //figure out how to remove all <>
+    // const cleanedSummary = summary.replace(/<p>|<\/p>|<br>/g, "") //figure out how to remove all <>
+    const cleanedSummary = summary.replace(/<(.*?)>/g, "");
 
     return (
         <div>
