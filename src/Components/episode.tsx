@@ -10,8 +10,8 @@ interface IEpisode {
     // airstamp: string;
     // runtime: number;
     image: {
-      medium: string;
-      original: string;
+      medium: string | null;
+      original: string | null;
     };
     summary: string;
     // _links: { self: { href: string } };
@@ -28,7 +28,7 @@ const Episode = ( {id, name, season, number, image, summary}: IEpisode) => {
              <span> S{season<10?`0${season}`:season}</span> 
              <span>E{number<10?`0${number}`:number}</span>
             </p>
-            <img src={image.medium} alt="episode item"/>
+            <img src={typeof(image.medium) === "string"? `${image.medium}` : "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png"} alt="episode item" width="250px"/>
             <p>{cleanedSummary}</p>
         </div>
     )

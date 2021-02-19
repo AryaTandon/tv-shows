@@ -1,7 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import episodes from './episodes.json';
+// import episodes from './episodes.json';
 import Episode from './Components/episode'
+
+// .then response => { 
+//   const responseVar = response.json()
+//   console.log(responseVar)
+//   return (
+//     responseVar
+//   )
+// } )
+
+// fetch('https://api.tvmaze.com/shows/82/episodes')
+// .then(async response => {
+// episodes = await response.json();
+// console.log(episodes);
+//   }
+// )
 
 interface IEpisode {
   id: number;
@@ -15,15 +30,31 @@ interface IEpisode {
   airstamp: string;
   runtime: number;
   image: {
-    medium: string;
-    original: string;
+    medium: string | null;
+    original: string | null;
   };
   summary: string;
   _links: { self: { href: string } };
 }
+
 function App() {
 
-  const [input, setInput] = useState("")
+  const [input, setInput] = useState("");
+  const [episodes, setEpisodes] = useState([]);
+
+  console.log("Hi");
+
+  useEffect(() => {
+    fetch('https://api.tvmaze.com/shows/82/episodes').then(
+      async response => {
+      let episodesInProgress = await response.json();
+      console.log(episodesInProgress);
+      setEpisodes(episodesInProgress);
+      }
+    )
+  }, [])
+
+  console.log("Hi2");
 
   const mapEpisodeDetails = ( {id, name, season, number, image, summary}: IEpisode) => {
     return <Episode 
@@ -58,12 +89,21 @@ function App() {
     element?.scrollIntoView({behavior: "smooth"});
   }
 
-  let filteredEpisodes = episodes.filter(episodePick);
+  // let filteredEpisodes;
+  // typeof(episodes) !== "object" ? filteredEpisodes = ([]).filter(episodePick)
+  // : filteredEpisodes = (episodes).filter(episodePick);
+  let filteredEpisodes = (episodes).filter(episodePick);
   let mappedEpisodes = filteredEpisodes.map(mapEpisodeDetails);
-  let episodeOption = episodes.map(episodesDropdown);
+  // let episodeOption
+  // typeof(episodes) !== "object" ? episodeOption = ([]).map(episodesDropdown)
+  // : episodeOption = episodes.map(episodesDropdown)
+  let episodeOption = episodes.map(episodesDropdown)
+
+  console.log("Hi3");
 
   return (
-    <div>
+    <div onLoad={() => console.log("Hi4")}>
+      {/* Ask Neill why 73 re-renders */}
       <select onChange={scrollToEpisode}>
         {episodeOption}
       </select>
@@ -71,7 +111,7 @@ function App() {
       type="text"
       onChange={episodesShowing}
       />
-      <p>The number of episodes which match your search: {filteredEpisodes.length}/{episodes.length}.</p>
+      <p>The number of episodes which match your search: {filteredEpisodes.length}/{episodes.length}</p>
      {mappedEpisodes}
     </div>
   );
