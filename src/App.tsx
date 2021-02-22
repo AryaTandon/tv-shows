@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 // import episodes from './episodes.json';
-import Episode from './Components/episode'
+import Episode from './Components/episode';
+import shows from './shows.json';
 
 // .then response => { 
 //   const responseVar = response.json()
@@ -40,14 +41,14 @@ interface IEpisode {
 function App() {
 
   const [input, setInput] = useState("");
-  const [episodes, setEpisodes] = useState([]);
+  const [episodes, setEpisodes] = useState<IEpisode[]>([]);
 
   console.log("Hi");
 
   useEffect(() => {
     fetch('https://api.tvmaze.com/shows/82/episodes').then(
       async response => {
-      let episodesInProgress = await response.json();
+      let episodesInProgress: IEpisode[] = await response.json();
       console.log(episodesInProgress);
       setEpisodes(episodesInProgress);
       }
@@ -89,6 +90,22 @@ function App() {
     element?.scrollIntoView({behavior: "smooth"});
   }
 
+  const mapShowNames = ({id, name}: {id: number, name: string}) => {
+      return (
+        id === 82 ? <option selected value={`${id}`}>{name}</option> : <option value={`${id}`}>{name}</option>
+      )
+  }
+
+  const selectShow = (event: React.ChangeEvent<HTMLSelectElement>) => {
+      fetch(`https://api.tvmaze.com/shows/${event.target.value}/episodes`).then(
+        async response => {
+        let episodesInProgress = await response.json();
+        console.log(episodesInProgress);
+        setEpisodes(episodesInProgress);
+        }
+      )
+  }
+
   // let filteredEpisodes;
   // typeof(episodes) !== "object" ? filteredEpisodes = ([]).filter(episodePick)
   // : filteredEpisodes = (episodes).filter(episodePick);
@@ -98,6 +115,8 @@ function App() {
   // typeof(episodes) !== "object" ? episodeOption = ([]).map(episodesDropdown)
   // : episodeOption = episodes.map(episodesDropdown)
   let episodeOption = episodes.map(episodesDropdown)
+  let sortedShows = shows.sort((a,b) => a.name.localeCompare(b.name))
+  let showNames = sortedShows.map(mapShowNames);
 
   console.log("Hi3");
 
@@ -106,6 +125,9 @@ function App() {
       {/* Ask Neill why 73 re-renders */}
       <select onChange={scrollToEpisode}>
         {episodeOption}
+      </select>
+      <select onChange={selectShow}>
+        {showNames}
       </select>
       <input 
       type="text"
