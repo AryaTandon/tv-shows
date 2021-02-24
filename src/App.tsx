@@ -1,23 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+// No longer importing locally-saved episodes - fetching from API below
 // import episodes from './episodes.json';
 import Episode from './Components/episode';
+// Importing 10 locally-saved shows...
 import shows from './shows.json';
-
-// .then response => { 
-//   const responseVar = response.json()
-//   console.log(responseVar)
-//   return (
-//     responseVar
-//   )
-// } )
-
-// fetch('https://api.tvmaze.com/shows/82/episodes')
-// .then(async response => {
-// episodes = await response.json();
-// console.log(episodes);
-//   }
-// )
 
 interface IEpisode {
   id: number;
@@ -43,19 +30,14 @@ function App() {
   const [input, setInput] = useState("");
   const [episodes, setEpisodes] = useState<IEpisode[]>([]);
 
-  console.log("Hi");
-
   useEffect(() => {
     fetch('https://api.tvmaze.com/shows/82/episodes').then(
       async response => {
       let episodesInProgress: IEpisode[] = await response.json();
-      console.log(episodesInProgress);
       setEpisodes(episodesInProgress);
       }
     )
   }, [])
-
-  console.log("Hi2");
 
   const mapEpisodeDetails = ( {id, name, season, number, image, summary}: IEpisode) => {
     return <Episode 
@@ -100,29 +82,21 @@ function App() {
       fetch(`https://api.tvmaze.com/shows/${event.target.value}/episodes`).then(
         async response => {
         let episodesInProgress = await response.json();
-        console.log(episodesInProgress);
         setEpisodes(episodesInProgress);
         }
       )
   }
 
-  // let filteredEpisodes;
-  // typeof(episodes) !== "object" ? filteredEpisodes = ([]).filter(episodePick)
-  // : filteredEpisodes = (episodes).filter(episodePick);
+ 
   let filteredEpisodes = (episodes).filter(episodePick);
   let mappedEpisodes = filteredEpisodes.map(mapEpisodeDetails);
-  // let episodeOption
-  // typeof(episodes) !== "object" ? episodeOption = ([]).map(episodesDropdown)
-  // : episodeOption = episodes.map(episodesDropdown)
+
   let episodeOption = episodes.map(episodesDropdown)
   let sortedShows = shows.sort((a,b) => a.name.localeCompare(b.name))
   let showNames = sortedShows.map(mapShowNames);
 
-  console.log("Hi3");
-
   return (
-    <div onLoad={() => console.log("Hi4")}>
-      {/* Ask Neill why 73 re-renders */}
+    <div>
       <select onChange={scrollToEpisode}>
         {episodeOption}
       </select>

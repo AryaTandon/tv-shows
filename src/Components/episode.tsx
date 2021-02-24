@@ -19,8 +19,8 @@ interface IEpisode {
 
 const Episode = ( {id, name, season, number, image, summary}: IEpisode) => {
     
-    // const cleanedSummary = summary.replace(/<p>|<\/p>|<br>/g, "") //figure out how to remove all <>
-    const cleanedSummary = summary.replace(/<(.*?)>/g, "");
+    // const cleanedSummary = summary.replace(/<p>|<\/p>|<br>/g, "") // Use regex instead...
+    const cleanedSummary = summary.replace(/<(.*?)>/g, ""); // ? makes it non-greedy/lazy - stops at first match
 
     return (
         <div id={`${id}`}>
